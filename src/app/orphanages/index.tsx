@@ -3,8 +3,6 @@ import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
-import api from "../../services/api";
-
 import mapMarkerImg from "../../public/images/map-marker.svg";
 import { FiPlus } from "react-icons/fi";
 

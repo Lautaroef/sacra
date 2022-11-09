@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model institution {
+  id               BigInt  @id @default(autoincrement())
+  name             String  @db.VarChar(255)
+  latitude         Decimal @db.Decimal
+  longitude        Decimal @db.Decimal
+  about            String
+  instructions     String
+  opening_hours    String  @db.VarChar(255)
+  open_on_weekends Boolean
+  image            image[]
+}
+
+model image {
+  id             BigInt      @id @default(autoincrement())
+  path           String      @db.VarChar(255)
+  institution_id BigInt
+  institution    institution @relation(fields: [institution_id], references: [id], map: "image_institutionId_fkey")
+}

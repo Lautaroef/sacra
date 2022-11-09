@@ -31,7 +31,7 @@ function Orphanage() {
 
       <main>
         <div className="orphanage-details">
-          <Image src={orphanage.images[activeImageIndex].url} alt={orphanage.name} />
+          <Image src={orphanage.images[activeImageIndex].path} alt={orphanage.name} />
           <div className="images">
             {orphanage.images.map((image, index) => {
               return (
@@ -43,7 +43,7 @@ function Orphanage() {
                     setActiveImageIndex(index);
                   }}
                 >
-                  <Image src={image.url} alt={orphanage.name} />
+                  <Image src={image.path} alt={orphanage.name} />
                 </button>
               );
             })}

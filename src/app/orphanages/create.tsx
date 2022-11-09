@@ -89,19 +89,16 @@ function CreateOrphanage() {
           <fieldset>
             <legend>Institución</legend>
             <Map
-              markers={[
-                {
-                  id: 0,
-                  name: name,
-                  latitude: position.latitude,
-                  longitude: position.longitude,
-                  about: about,
-                  instructions: instructions,
-                  opening_hours: opening_hours,
-                  open_on_weekends: open_on_weekends,
-                  images: images,
-                },
-              ]}
+              markers={{
+                id: 0,
+                name: name,
+                latitude: position.latitude,
+                longitude: position.longitude,
+                about: about,
+                instructions: instructions,
+                opening_hours: opening_hours,
+                open_on_weekends: open_on_weekends,
+              }}
               center={[-19.9292425, -43.9458236]}
               style={{ width: "100%", height: 280 }}
               zoom={15}

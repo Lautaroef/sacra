@@ -8,22 +8,26 @@ Desenvolvida durante o evento NLW (Next Level Week), uma experiência online par
 
 :camera: **Screenshots de telas**
 
-- :house:  **Página Inicial**
-<p align="center"><img src="/images/landing-page.png"></p>
+- :house: **Página Inicial**
+<p align="center"><img src="public/static/images/demo.gif"></p>
 
 #
-- :round_pushpin:  **Mapa dos Orfanatos**
-<p align="center"><img src="/images/orphanages-map.png"></p>
+
+- :round_pushpin: **Mapa dos Orfanatos**
+<p align="center"><img src="public/static/images/demo2.gif"></p>
 
 #
-- :movie_camera:  **Demo Tour:**
-<p align="center"><img src="/images/demo.gif"></p>
+
+- :movie_camera: **Demo Tour:**
+<p align="center"><img src="public/static/images/orphanage.png"></p>
 
 #
-- :movie_camera:  **Demo Cadastro:**
-<p align="center"><img src="/images/demo2.gif"></p>
+
+- :movie_camera: **Demo Cadastro:**
+<p align="center"><img src="public/static/images/register-orphanage.png"></p>
 
 :gear: **Tencologias utilizadas:**
+
 - React
 - Nodejs
 - Express
@@ -54,5 +58,7 @@ yarn typeorm migration:run
 ## Rode a aplicao backend
 npm run dev
 ```
+
 #
+
 Desenvolvido por Orlando Messias [linkedin.com/in/orlando-messias-dev](https://www.linkedin.com/in/orlando-messias-dev)

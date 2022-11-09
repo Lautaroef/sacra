@@ -5,14 +5,14 @@ import {
   getInstitutions,
   getInstitution,
   createInstitution,
-  updateInstitution
+  updateInstitution,
 } from "./controllers/institutions";
 
 const routes = Router();
-const upload = multer(uploadConfig);
 
 routes.get("/orphanages", getInstitutions);
+routes.post("/orphanages", createInstitution);
 routes.get("/orphanages/:id", getInstitution, updateInstitution);
-routes.post("/orphanages", upload.array("images"), createInstitution);
+// routes.post("/orphanages", upload.array("images"), createInstitution);
 
 export default routes;

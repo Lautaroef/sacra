@@ -22,9 +22,7 @@ type Orphanage = {
   images: OrphanageImage[];
 };
 
-type OrphanageImage =
-  | {
-      id?: number;
-      path: string | File;
-    }
-  | File;
+type OrphanageImage = {
+  id: number;
+  path: string;
+};

@@ -1,7 +1,7 @@
-import { getRepository } from "typeorm";
 import Orphanage from "../models/Orphanage";
 import { Request, Response } from "express";
 import orphanageView from "../views/orphanages_view";
+import uploadImagesToIMGBB from "../config/uploadImage";
 import * as Yup from "yup";
 
 export const getInstitutions = async (request: Request, response: Response) => {
@@ -24,8 +24,7 @@ export const getInstitution = async (request: Request, response: Response) => {
 };
 
 export const createInstitution = async (request: Request, response: Response) => {
-  const { name, latitude, longitude, about, instructions, opening_hours, open_on_weekends } =
-    request.body;
+  const { name, latitude, longitude, about, instructions, opening_hours, open_on_weekends } = request.body;
 
   const institutionsRepository = getRepository(Orphanage);
 
