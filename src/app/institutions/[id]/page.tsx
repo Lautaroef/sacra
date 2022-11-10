@@ -1,61 +1,46 @@
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { useRouter } from "next/router";
+import { use } from "react";
+import prisma from "lib/prisma";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 
-import api from "../../services/api";
-
-import { FaWhatsapp } from "react-icons/fa";
+import mapIcon from "utils/mapIcon";
+import { FaWhatsapp as FaWhatsApp } from "react-icons/fa";
 import { FiClock, FiInfo } from "react-icons/fi";
-import mapIcon from "../../utils/mapIcon";
-import Sidebar from "../../components/Sidebar";
+import InstitutionImages from "./InstitutionImages";
 
-function Orphanage() {
-  const { query } = useRouter();
-  const [orphanage, setOrphanage] = useState<Orphanage>();
-  const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
+async function getInstitution(id: string) {
+  const institution = await prisma.institution.findUnique({
+    where: {
+      id: parseInt(id),
+    },
+    include: {
+      images: true,
+    },
+  });
+  return institution;
+}
 
-  useEffect(() => {
-    api.get(`/orphanages/${query.id}`).then((response) => {
-      setOrphanage(response.data);
-    });
-  }, [query.id]);
+export async function generateStaticParams() {
+  let institutions = await prisma.institution.findMany({});
 
-  if (!orphanage) {
-    return <p>Cargando...</p>;
-  }
+  return institutions.map((institution) => ({ id: institution.id }));
+}
+
+function Page({ params }: { params: { id: string } }) {
+  const institution = use(getInstitution(params.id));
 
   return (
-    <div id="page-orphanage">
-      <Sidebar />
-
-      <main>
+    institution && (
+      <main id="page-orphanage">
         <div className="orphanage-details">
-          <Image src={orphanage.images[activeImageIndex].path} alt={orphanage.name} />
-          <div className="images">
-            {orphanage.images.map((image, index) => {
-              return (
-                <button
-                  key={image.id}
-                  className={activeImageIndex === index ? "active" : ""}
-                  type="button"
-                  onClick={() => {
-                    setActiveImageIndex(index);
-                  }}
-                >
-                  <Image src={image.path} alt={orphanage.name} />
-                </button>
-              );
-            })}
-          </div>
+          <InstitutionImages institution={institution} />
 
           <div className="orphanage-details-content">
-            <h1>{orphanage.name}</h1>
-            <p>{orphanage.about}</p>
+            <h1>{institution.name}</h1>
+            <p>{institution.about}</p>
 
             <div className="map-container">
               <MapContainer
-                center={[orphanage.latitude, orphanage.longitude]}
+                center={[institution.latitude.toNumber(), institution.longitude.toNumber()]}
                 zoom={16}
                 style={{ width: "100%", height: 280 }}
                 dragging={false}
@@ -68,7 +53,10 @@ function Orphanage() {
                 <Marker
                   interactive={false}
                   icon={mapIcon}
-                  position={[orphanage.latitude, orphanage.longitude]}
+                  position={[
+                    institution.latitude.toNumber(),
+                    institution.longitude.toNumber(),
+                  ]}
                 />
               </MapContainer>
 
@@ -76,7 +64,7 @@ function Orphanage() {
                 <a
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${orphanage.latitude},${orphanage.longitude}`}
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${institution.latitude},${institution.longitude}`}
                 >
                   Ver rutas en Google Maps
                 </a>
@@ -86,15 +74,15 @@ function Orphanage() {
             <hr />
 
             <h2>Horarios comerciales</h2>
-            <p>{orphanage.instructions}</p>
+            <p>{institution.instructions}</p>
 
             <div className="open-details">
               <div className="hour">
                 <FiClock size={32} color="#15B6D6" />
                 Lunes a Viernes <br />
-                {orphanage.opening_hours}
+                {institution.opening_hours}
               </div>
-              {orphanage.open_on_weekends ? (
+              {institution.open_on_weekends ? (
                 <div className="open-on-weekends">
                   <FiInfo size={32} color="#39CC83" />
                   Atendemos durante el <br />
@@ -110,14 +98,14 @@ function Orphanage() {
             </div>
 
             <button type="button" className="contact-button">
-              <FaWhatsapp size={20} color="#FFF" />
+              <FaWhatsApp size={20} color="#FFF" />
               Contáctenos
             </button>
           </div>
         </div>
       </main>
-    </div>
+    )
   );
 }
 
-export default Orphanage;
+export default Page;

@@ -1,19 +1,20 @@
 import axios from "axios";
-import { IMGBB_API_URL } from "../constants";
 
-const uploadImagesToIMGBB = async (images: File[]) => {
-  const formData = new FormData();
-  images.forEach((image) => {
-    formData.append("image", image);
-  });
+const uploadImagesToIMGBB = async (images: FileList) => {
+  const urls: string[] = [];
 
-  const response = await axios.post(IMGBB_API_URL, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  for (let i = 0; i < images.length; i++) {
+    const formData = new FormData();
+    formData.append("image", images[i] as any);
+    const response = await axios.post(process.env.NEXT_PUBLIC_IMGBB_API_URL!, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    urls.push(response.data.data.url);
+  }
 
-  return response.data.data;
+  return urls;
 };
 
 export default uploadImagesToIMGBB;

@@ -16,7 +16,7 @@ model institution {
   instructions     String
   opening_hours    String  @db.VarChar(255)
   open_on_weekends Boolean
-  image            image[]
+  images           image[]
 }
 
 model image {

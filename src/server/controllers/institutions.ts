@@ -1,19 +1,30 @@
-import Orphanage from "../models/Orphanage";
-import { Request, Response } from "express";
-import orphanageView from "../views/orphanages_view";
+import { PrismaClient } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
 import uploadImagesToIMGBB from "../config/uploadImage";
 import * as Yup from "yup";
 
-export const getInstitutions = async (request: Request, response: Response) => {
-  const institutionsRepository = getRepository(Orphanage);
-  const institutions = await institutionsRepository.find({
-    relations: ["images"],
+const prisma = new PrismaClient();
+
+const getInstitutions = async (request: NextRequest, response: NextResponse) => {
+  const institutions = await prisma.institution.findMany({
+    include: {
+      images: true,
+    },
   });
 
-  return response.json(orphanageView.renderMany(institutions));
+  return response.status(200).json(institutions);
 };
 
-export const getInstitution = async (request: Request, response: Response) => {
+// const getInstitutions = async (request: NextRequest, response: NextResponse) => {
+//   const institutionsRepository = getRepository(Orphanage);
+//   const institutions = await institutionsRepository.find({
+//     relations: ["images"],
+//   });
+
+//   return response.json(orphanageView.renderMany(institutions));
+// };
+
+const getInstitution = async (request: NextRequest, response: NextResponse) => {
   const { id } = request.params;
   const institutionsRepository = getRepository(Orphanage);
   const orphanage = await institutionsRepository.findOneOrFail(id, {
@@ -23,8 +34,9 @@ export const getInstitution = async (request: Request, response: Response) => {
   return response.json(orphanageView.render(orphanage));
 };
 
-export const createInstitution = async (request: Request, response: Response) => {
-  const { name, latitude, longitude, about, instructions, opening_hours, open_on_weekends } = request.body;
+const createInstitution = async (request: NextRequest, response: NextResponse) => {
+  const { name, latitude, longitude, about, instructions, opening_hours, open_on_weekends } =
+    request.body;
 
   const institutionsRepository = getRepository(Orphanage);
 
@@ -70,7 +82,7 @@ export const createInstitution = async (request: Request, response: Response) =>
   return response.status(201).json(orphanage);
 };
 
-export const updateInstitution = async (request: Request, response: Response) => {
+const updateInstitution = async (request: NextRequest, response: NextResponse) => {
   const { id } = request.params;
   const { name, latitude, longitude, about, instructions, opening_hours, open_on_weekends } =
     request.body;
@@ -128,4 +140,6 @@ export const updateInstitution = async (request: Request, response: Response) =>
   */
 
   return response.status(201).json(orphanage);
-}
+};
+
+export { getInstitutions, getInstitution, createInstitution, updateInstitution };

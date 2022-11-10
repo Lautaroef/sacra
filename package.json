@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "server": "ts-node-dev --transpile-only --ignore-watch node_modules src/server.ts",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

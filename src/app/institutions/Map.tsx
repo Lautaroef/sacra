@@ -1,13 +1,14 @@
+"use client";
+
+import type { institution as Institution } from "@prisma/client";
 import Link from "next/link";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { FiArrowRight } from "react-icons/fi";
-import mapIcon from "../utils/mapIcon";
+import mapIcon from "../../utils/mapIcon";
 import "leaflet/dist/leaflet.css"; // en caso de que no se vea el mapa
 
-type MarkerProps = Omit<Orphanage, "images">;
-
 type Props = {
-  markers: MarkerProps | MarkerProps[];
+  markers: Institution | Institution[];
   center: [number, number];
   zoom: number;
   interactive?: boolean;
@@ -23,16 +24,16 @@ const Map = ({ markers, center, zoom, interactive = true, style, onClick }: Prop
       {Array.isArray(markers) ? (
         markers.map(
           (marker) =>
-            marker.latitude !== 0 && (
+            marker.latitude.toNumber() !== 0 && (
               <Marker
                 icon={mapIcon}
-                key={marker.id}
+                key={marker.id.toString()}
                 interactive={interactive}
-                position={[marker.latitude, marker.longitude]}
+                position={[marker.latitude.toNumber(), marker.longitude.toNumber()]}
               >
                 <Popup closeButton={false} minWidth={240} maxWidth={240} className="map-popup">
                   {marker.name}
-                  <Link href={`/orphanages/${marker.id}`}>
+                  <Link href={`/institutions/${marker.id}`}>
                     <FiArrowRight size={20} color="#FFF" />
                   </Link>
                 </Popup>
@@ -43,11 +44,11 @@ const Map = ({ markers, center, zoom, interactive = true, style, onClick }: Prop
         <Marker
           icon={mapIcon}
           interactive={interactive}
-          position={[markers.latitude, markers.longitude]}
+          position={[markers.latitude.toNumber(), markers.longitude.toNumber()]}
         >
           <Popup closeButton={false} minWidth={240} maxWidth={240} className="map-popup">
             {markers.name}
-            <Link href={`/orphanages/${markers.id}`}>
+            <Link href={`/institutions/${markers.id}`}>
               <FiArrowRight size={20} color="#FFF" />
             </Link>
           </Popup>
