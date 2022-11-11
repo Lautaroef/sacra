@@ -1,18 +1,20 @@
 "use client";
-
 import type { LeafletMouseEvent } from "leaflet";
 
-import { useState, FormEvent, ChangeEvent, useMemo } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import prisma from "lib/prisma";
+import { createInstitution } from "server/controllers/institutions";
 
-import uploadImagesToIMGBB from "lib/uploadImageToIBB";
 import { FiPlus } from "react-icons/fi";
-import { Decimal } from "@prisma/client/runtime";
 
-function CreateOrphanage() {
+const Map = dynamic(() => import("app/institutions/Map"), {
+  loading: () => <p>Cargando mapa...</p>,
+  ssr: false,
+});
+
+function CreateInstitutionComponent() {
   const router = useRouter();
 
   const [position, setPosition] = useState<InstitutePosition>({ latitude: 0, longitude: 0 });
@@ -24,21 +26,10 @@ function CreateOrphanage() {
   const [images, setImages] = useState<string[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
-  const Map = useMemo(
-    () =>
-      dynamic(() => import("app/institutions/Map"), {
-        loading: () => <p>Cargando mapa...</p>,
-        ssr: false,
-      }),
-    []
-  );
-
+  // create function that creates a marker on the position clicked
   function handleMapClick(event: LeafletMouseEvent) {
     const { lat, lng } = event.latlng;
-    setPosition({
-      latitude: lat,
-      longitude: lng,
-    });
+    setPosition({ latitude: lat, longitude: lng });
   }
 
   function handleSelectImages(event: ChangeEvent<HTMLInputElement>) {
@@ -47,84 +38,75 @@ function CreateOrphanage() {
     }
     console.log(event.target.files);
 
-    uploadImagesToIMGBB(event.target.files).then((urls) => {
-      setImages(urls);
-      setPreviewImages(urls.map((url) => url));
+    const selectedImages: File[] = Array.from(event.target.files);
+    const urlsStrings: string[] = selectedImages.map((image) => URL.createObjectURL(image));
+    setImages(urlsStrings);
+
+    const selectedImagesPreview = selectedImages.map((image) => {
+      return URL.createObjectURL(image);
     });
-
-    // const selectedImages = Array.from(event.target.files);
-    // setImages(selectedImages);
-
-    // const selectedImagesPreview = selectedImages.map((image) => {
-    //   return URL.createObjectURL(image);
-    // });
-
-    // setPreviewImages(selectedImagesPreview);
+    setPreviewImages(selectedImagesPreview);
   }
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     const { latitude, longitude } = position;
 
-    const data = new FormData();
+    // const data = new FormData();
 
-    data.append("name", name);
-    data.append("about", about);
-    data.append("latitude", String(latitude));
-    data.append("longitude", String(longitude));
-    data.append("instructions", instructions);
-    data.append("opening_hours", opening_hours);
-    data.append("open_on_weekends", String(open_on_weekends));
-    images.forEach((image) => {
-      data.append("images", image);
-    });
+    // data.append("name", name);
+    // data.append("about", about);
+    // data.append("latitude", String(latitude));
+    // data.append("longitude", String(longitude));
+    // data.append("instructions", instructions);
+    // data.append("opening_hours", opening_hours);
+    // data.append("open_on_weekends", String(open_on_weekends));
+    // images.forEach((image) => {
+    //   data.append("images", image);
+    // });
 
-    await prisma.institution.create({
-      data: {
-        name,
-        about,
-        latitude,
-        longitude,
-        instructions,
-        opening_hours,
-        open_on_weekends,
-        // images: {
-        //   create: {
-        //     path: images[0],
-        //   },
-        // },
-      },
-    });
+    // createInstitution({
+    //   name,
+    //   about,
+    //   latitude: position.latitude,
+    //   longitude: position.longitude,
+    //   instructions,
+    //   opening_hours,
+    //   open_on_weekends,
+    //   images: images.map((image) => ({
+    //     path: image,
+    //   })) as any,
+    // });
 
-    alert("Successfully registered");
+    alert("Institución creada con éxito!");
 
-    router.push("/institutions");
+    router?.push("/institutions");
   }
-
   return (
     <main id="page-create-institution">
       <form className="create-institution-form" onSubmit={handleSubmit}>
         <fieldset>
           <legend>Institución</legend>
           <Map
-            markers={{
-              id: BigInt(0),
-              name: name,
-              latitude: new Decimal(position.latitude),
-              longitude: new Decimal(position.longitude),
-              about: about,
-              instructions: instructions,
-              opening_hours: opening_hours,
-              open_on_weekends: open_on_weekends,
-            }}
-            center={[-19.9292425, -43.9458236]}
+            zoom={12.5}
+            center={[-24.8421731, -65.5109202]}
             style={{ width: "100%", height: 280 }}
-            zoom={15}
-            // @ts-ignore
             onClick={handleMapClick}
+            markers={{
+              name,
+              latitude: position.latitude,
+              longitude: position.longitude,
+              about,
+              instructions,
+              opening_hours,
+              open_on_weekends,
+            }}
           />
+          <small>
+            Hace click en el mapa para seleccionar el punto de la nueva institución.
+          </small>
 
-          <div className="input-block">
+          <div className="input-block" style={{ marginTop: "1.5rem" }}>
             <label htmlFor="name">Nombre</label>
             <input id="name" value={name} onChange={(e) => setName(e.target.value)} />
           </div>
@@ -208,4 +190,4 @@ function CreateOrphanage() {
   );
 }
 
-export default CreateOrphanage;
+export default CreateInstitutionComponent;

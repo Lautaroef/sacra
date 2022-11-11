@@ -5,14 +5,14 @@ $color_4: #37c77f;
 $color_5: #ff6690;
 $color_6: #ffffff;
 
-#page-orphanage {
+#page-institution {
   display: flex;
   min-height: 100vh;
   main {
     flex: 1;
   }
 }
-.orphanage-details {
+.institution-details {
   width: 700px;
   margin: 64px auto;
   background: #ffffff;
@@ -48,7 +48,7 @@ $color_6: #ffffff;
       opacity: 1;
     }
   }
-  .orphanage-details-content {
+  .institution-details-content {
     padding: 80px;
     h1 {
       color: $color_1;

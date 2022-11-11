@@ -8,10 +8,10 @@ datasource db {
 }
 
 model institution {
-  id               BigInt  @id @default(autoincrement())
+  id               Int     @id @default(autoincrement())
   name             String  @db.VarChar(255)
-  latitude         Decimal @db.Decimal
-  longitude        Decimal @db.Decimal
+  latitude         Float
+  longitude        Float
   about            String
   instructions     String
   opening_hours    String  @db.VarChar(255)
@@ -20,8 +20,8 @@ model institution {
 }
 
 model image {
-  id             BigInt      @id @default(autoincrement())
+  id             Int         @id @default(autoincrement())
   path           String      @db.VarChar(255)
-  institution_id BigInt
+  institution_id Int
   institution    institution @relation(fields: [institution_id], references: [id], map: "image_institutionId_fkey")
 }

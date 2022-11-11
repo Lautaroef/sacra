@@ -9,12 +9,10 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
   }, [error]);
 
   return (
-    <div>
+    <div style={{ color: "#000" }}>
       <p>Something went wrong!</p>
       <button onClick={() => reset()}>Reset error boundary</button>
-      <pre>
-        <code>{error.message}</code>
-      </pre>
+      <pre>{error.stack}</pre>
     </div>
   );
 }

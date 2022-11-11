@@ -1,60 +1,35 @@
-import prisma from "lib/prisma";
-import { use, useMemo } from "react";
+import { use } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import dynamic from "next/dynamic";
+import Map from "./Map";
 
-import mapMarkerImg from "../../../public/static/images/map-marker.svg";
 import { FiPlus } from "react-icons/fi";
+import { getInstitutions } from "server/controllers/institutions";
 
-async function getInstitutions() {
-  const institutions = await prisma.institution.findMany({
-    include: {
-      images: true,
-    },
-  });
-  return institutions;
-}
-
-function Page() {
+function InstitutionsComponent() {
   const institutions = use(getInstitutions());
-  console.log(institutions);
-
-  // const Map = useMemo(
-  //   () =>
-  //     dynamic(() => import("./Map"), {
-  //       loading: () => <p>Cargando mapa...</p>,
-  //       ssr: false,
-  //     }),
-  //   []
-  // );
+  // console.log(institutions);
+  console.log(
+    "Institution's length: ",
+    institutions?.length,
+    institutions?.length > 0 ? "✅" : "❌"
+  );
 
   return (
-    <div id="page-map">
-      <aside>
-        <header>
-          <Image src={mapMarkerImg} alt="map" />
-          <h2>Elija una institución del mapa</h2>
-          <p>Muchos niños están esperando tu visita :)</p>
-        </header>
-        <footer>
-          <strong>Salta, Argentina</strong>
-          <span>Argentina</span>
-        </footer>
-      </aside>
-      {/* <Map
-        zoom={15}
+    <>
+      <Map
+        zoom={12.5}
         markers={institutions}
-        center={[-19.9292425, -43.9458236]}
+        center={[-24.8421731, -65.5109202]}
         style={{ width: "100%", height: "100%" }}
-      /> */}
+        className="leaflet-container"
+      />
       <div>
         <Link href="/institutions/create" className="create-institution">
           <FiPlus size={32} color="#FFF" />
         </Link>
       </div>
-    </div>
+    </>
   );
 }
 
-export default Page;
+export default InstitutionsComponent;

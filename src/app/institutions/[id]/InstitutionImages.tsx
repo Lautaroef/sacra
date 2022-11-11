@@ -8,21 +8,24 @@ type Institution = institution & { images: image[] };
 
 function InstitutionImages({ institution }: { institution: Institution }) {
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
-
+  console.log(institution);
   return (
     <>
-      <Image src={institution.images[activeImageIndex].path} alt={institution.name} />
+      <Image
+        src={institution.images[activeImageIndex].path}
+        alt={institution.name}
+        width={600}
+        height={400}
+      />
       <div className="images">
         {institution.images.map((image, index) => (
           <button
             key={image.id.toString()}
             className={activeImageIndex === index ? "active" : ""}
             type="button"
-            onClick={() => {
-              setActiveImageIndex(index);
-            }}
+            onClick={() => setActiveImageIndex(index)}
           >
-            <Image src={image.path} alt={institution.name} />
+            <Image src={image.path} alt={institution.name} width={64} height={64} />
           </button>
         ))}
       </div>

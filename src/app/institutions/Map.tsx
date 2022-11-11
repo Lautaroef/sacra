@@ -1,59 +1,83 @@
 "use client";
 
-import type { institution as Institution } from "@prisma/client";
+import "leaflet/dist/leaflet.css"; // en caso de que no se vea el mapa
+import type { Prisma, institution as Institution } from "@prisma/client";
+import type { LeafletMouseEvent, Map as MapType } from "leaflet";
 import Link from "next/link";
+import { useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { FiArrowRight } from "react-icons/fi";
-import mapIcon from "../../utils/mapIcon";
-import "leaflet/dist/leaflet.css"; // en caso de que no se vea el mapa
+import leafletMapIcon from "../../utils/leafletMapIcon";
+
+type MarkerOptions = Institution[] | Prisma.institutionCreateInput;
 
 type Props = {
-  markers: Institution | Institution[];
+  markers: MarkerOptions;
   center: [number, number];
   zoom: number;
-  interactive?: boolean;
   style: React.CSSProperties;
-  onClick?: () => void;
+  interactive?: boolean;
+  className?: string;
+  onClick?: (e: LeafletMouseEvent) => void;
 };
 
-const Map = ({ markers, center, zoom, interactive = true, style, onClick }: Props) => {
+const Map = ({
+  markers,
+  center,
+  zoom,
+  style,
+  onClick,
+  className,
+  interactive = true,
+}: Props) => {
+  const mapRef = useRef<MapType>(null);
+  const mapElement = mapRef.current;
+
+  useEffect(() => {
+    mapElement?.on("click", onClick!);
+    return () => {
+      mapElement?.off("click", onClick);
+    };
+  }, [mapElement, onClick]);
+
   return (
-    <MapContainer center={center} zoom={zoom} style={style}>
+    <MapContainer
+      id="map"
+      zoom={zoom}
+      ref={mapRef}
+      style={style}
+      center={center}
+      className={className}
+      dragging={interactive}
+      touchZoom={interactive}
+      zoomControl={interactive}
+      scrollWheelZoom={interactive}
+      doubleClickZoom={interactive}
+    >
       <TileLayer url="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-      {Array.isArray(markers) ? (
-        markers.map(
-          (marker) =>
-            marker.latitude.toNumber() !== 0 && (
-              <Marker
-                icon={mapIcon}
-                key={marker.id.toString()}
-                interactive={interactive}
-                position={[marker.latitude.toNumber(), marker.longitude.toNumber()]}
-              >
-                <Popup closeButton={false} minWidth={240} maxWidth={240} className="map-popup">
-                  {marker.name}
-                  <Link href={`/institutions/${marker.id}`}>
-                    <FiArrowRight size={20} color="#FFF" />
-                  </Link>
-                </Popup>
-              </Marker>
-            )
-        )
-      ) : (
-        <Marker
-          icon={mapIcon}
-          interactive={interactive}
-          position={[markers.latitude.toNumber(), markers.longitude.toNumber()]}
-        >
-          <Popup closeButton={false} minWidth={240} maxWidth={240} className="map-popup">
-            {markers.name}
-            <Link href={`/institutions/${markers.id}`}>
-              <FiArrowRight size={20} color="#FFF" />
-            </Link>
-          </Popup>
-        </Marker>
-      )}
+      {Array.isArray(markers)
+        ? markers.map((marker) => (
+            <Marker
+              icon={leafletMapIcon}
+              key={marker.id}
+              position={[Number(marker.latitude), Number(marker.longitude)]}
+            >
+              <Popup closeButton={false} minWidth={240} maxWidth={240} className="map-popup">
+                {marker.name}
+                <Link href={`/institutions/${marker.id}`}>
+                  <FiArrowRight size={20} color="#FFF" />
+                </Link>
+              </Popup>
+            </Marker>
+          ))
+        : Number(markers.latitude) !== 0 && (
+            <Marker
+              icon={leafletMapIcon}
+              key={markers.name}
+              position={[Number(markers.latitude), Number(markers.longitude)]}
+            />
+          )}
     </MapContainer>
   );
 };

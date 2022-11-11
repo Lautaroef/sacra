@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const uploadImagesToIMGBB = async (images: FileList) => {
+const uploadImagesToIMGBB = async (images: { path: string }[]) => {
   const urls: string[] = [];
 
   for (let i = 0; i < images.length; i++) {
     const formData = new FormData();
-    formData.append("image", images[i] as any);
+    formData.append("image", images[i].path);
     const response = await axios.post(process.env.NEXT_PUBLIC_IMGBB_API_URL!, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
