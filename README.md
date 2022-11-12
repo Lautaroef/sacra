@@ -1,64 +1,37 @@
-## Happy - App de Localização
+## SACRA - Website for a Therapeutic Educational Center
 
-#### :computer: Projeto com NodeJS, Express, Typescript, Leaftlet :computer:
+El sitio web de **SACRA** conecta a las personas con discapacidades con los Centros de Educacion Especial dentro de la ciudad de Salta, Argentina con el objectivo de mejorar las oportunidades y la dignidad de la persona con discapacidad.
 
-**Happy** é uma aplicação que conecta pessoas a orfanatos com intuito de fazer o dia de muitas crianças mais feliz!
+### :computer: Technologies used
+- React.js
+- Next.js
+- TypeScript
+- Node.js
+- Express
+- Leaflet (For displaying maps)
+- Yup (For input validations)
+- Prisma
+- PostgreSQL
 
-Desenvolvida durante o evento NLW (Next Level Week), uma experiência online para evoluir suas habilidades em programação e te elevar para o próximo nível.
+:camera: **Preview images**
 
-:camera: **Screenshots de telas**
-
-- :house: **Página Inicial**
+- :house: **Home page**
 <p align="center"><img src="public/static/images/demo.gif"></p>
 
 #
 
-- :round_pushpin: **Mapa dos Orfanatos**
+- :round_pushpin: **Map of Institutions**
 <p align="center"><img src="public/static/images/demo2.gif"></p>
 
 #
 
-- :movie_camera: **Demo Tour:**
+- :movie_camera: **Tour**
 <p align="center"><img src="public/static/images/orphanage.png"></p>
 
 #
 
-- :movie_camera: **Demo Cadastro:**
+- :movie_camera: **Tour Cadastro:**
 <p align="center"><img src="public/static/images/register-orphanage.png"></p>
 
-:gear: **Tencologias utilizadas:**
 
-- React
-- Nodejs
-- Express
-- Typescript
-- SQLite
-- Typeorm
-- Leaflet: lib js para mapas
-- Yup
-
-```
-## Clone o repositório usando git
-git clone https://github.com/orlando-messias/happy.git
-
-## Abra a pasta web e instale as dependências frontend
-cd web
-yarn ou npm install
-
-## Rode a aplicação frontend
-npm start
-
-## Abra a pasta server e instale as dependências backend
-cd server
-yarn ou npm install
-
-## Crie as tabelas no banco de dados rodando comando de migrations
-yarn typeorm migration:run
-
-## Rode a aplicao backend
-npm run dev
-```
-
-#
-
-Desenvolvido por Orlando Messias [linkedin.com/in/orlando-messias-dev](https://www.linkedin.com/in/orlando-messias-dev)
+Developed by Lautaro Figueroa [linkedin.com/in/lautaro-figueroa-it](https://www.linkedin.com/in/lautaro-figueroa-it/)
