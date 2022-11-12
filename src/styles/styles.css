@@ -125,10 +125,32 @@ form.create-institution-form .input-block .images-container {
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 16px;
 }
-form.create-institution-form .input-block .images-container img {
-  border-radius: 20px;
+form.create-institution-form .input-block .images-container .thumbnail {
+  width: 100%;
+  position: relative;
+  border-radius: 16px;
+  height: 96px;
+  width: 122.5px;
 }
-form.create-institution-form .input-block .new-image {
+form.create-institution-form .input-block .images-container .thumbnail img {
+  border-radius: 16px;
+}
+form.create-institution-form .input-block .images-container .thumbnail button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 25;
+  right: 25;
+  margin-right: 5px;
+  margin-top: 5px;
+  width: 100%;
+  color: #b30000;
+  text-align: right;
+  cursor: auto;
+  z-index: 1;
+}
+form.create-institution-form .input-block .images-container .new-image {
   height: 96px;
   background: #f5f8fa;
   border: 1px dashed #96d2f0;

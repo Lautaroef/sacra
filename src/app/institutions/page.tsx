@@ -4,6 +4,7 @@ import Map from "./Map";
 
 import { FiPlus } from "react-icons/fi";
 import { getInstitutions } from "server/controllers/institutions";
+import SideBar from "./SideBar";
 
 function InstitutionsComponent() {
   const institutions = use(getInstitutions());
@@ -15,7 +16,8 @@ function InstitutionsComponent() {
   );
 
   return (
-    <>
+    <div id="page-map">
+      <SideBar />
       <Map
         zoom={12.5}
         markers={institutions}
@@ -28,7 +30,7 @@ function InstitutionsComponent() {
           <FiPlus size={32} color="#FFF" />
         </Link>
       </div>
-    </>
+    </div>
   );
 }
 

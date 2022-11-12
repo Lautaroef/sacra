@@ -7,7 +7,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { createInstitution } from "server/controllers/institutions";
 
-import { FiPlus } from "react-icons/fi";
+import { FiPlus, FiX } from "react-icons/fi";
 
 const Map = dynamic(() => import("app/institutions/Map"), {
   loading: () => <p>Cargando mapa...</p>,
@@ -23,7 +23,7 @@ function CreateInstitutionComponent() {
   const [instructions, setInstructions] = useState<string>("");
   const [opening_hours, setOpeningHours] = useState<string>("");
   const [open_on_weekends, setOpenOnWeekends] = useState<boolean>(true);
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   // create function that creates a marker on the position clicked
@@ -39,20 +39,48 @@ function CreateInstitutionComponent() {
     console.log(event.target.files);
 
     const selectedImages: File[] = Array.from(event.target.files);
-    const urlsStrings: string[] = selectedImages.map((image) => URL.createObjectURL(image));
-    setImages(urlsStrings);
+    // const urlsStrings: string[] = selectedImages.map((image) => URL.createObjectURL(image));
+    setImages((prev) => [...prev, ...selectedImages]);
 
     const selectedImagesPreview = selectedImages.map((image) => {
       return URL.createObjectURL(image);
     });
-    setPreviewImages(selectedImagesPreview);
+    setPreviewImages((prev) => [...prev, ...selectedImagesPreview]);
   }
 
+  const removeImage = (index: number) => {
+    const newImages = images.filter((_, i) => i !== index);
+    setImages(newImages);
+    const newPreviewImages = previewImages.filter((_, i) => i !== index);
+    setPreviewImages(newPreviewImages);
+  };
+
+  console.log({
+    name,
+    about,
+    position,
+    instructions,
+    opening_hours,
+    open_on_weekends,
+    images,
+  });
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
+
     const { latitude, longitude } = position;
 
-    // const data = new FormData();
+    if (
+      !name ||
+      !about ||
+      !latitude ||
+      !longitude ||
+      !instructions ||
+      !opening_hours ||
+      !open_on_weekends ||
+      !images
+    ) {
+      alert("Por favor, complete todos los 7 campos");
+    }
 
     // data.append("name", name);
     // data.append("about", about);
@@ -108,19 +136,14 @@ function CreateInstitutionComponent() {
 
           <div className="input-block" style={{ marginTop: "1.5rem" }}>
             <label htmlFor="name">Nombre</label>
-            <input id="name" value={name} onChange={(e) => setName(e.target.value)} />
+            <input id="name" onBlur={(e) => setName(e.target.value)} />
           </div>
 
           <div className="input-block">
             <label htmlFor="about">
               Descripción <span>Máximo de 300 caracteres</span>
             </label>
-            <textarea
-              id="name"
-              maxLength={300}
-              value={about}
-              onChange={(e) => setAbout(e.target.value)}
-            />
+            <textarea id="name" maxLength={300} onBlur={(e) => setAbout(e.target.value)} />
           </div>
 
           <div className="input-block">
@@ -128,7 +151,18 @@ function CreateInstitutionComponent() {
 
             <div className="images-container">
               {previewImages.map((image) => {
-                return <Image alt={name} key={image} src={image} height={96} width={120} />;
+                return (
+                  <div className="thumbnail">
+                    <Image alt={name} key={image} src={image} fill />
+                    <button
+                      type="button"
+                      className="close-button-absolute"
+                      onClick={() => removeImage(previewImages.indexOf(image))}
+                    >
+                      <FiX size={16} color="#FF669D" />
+                    </button>
+                  </div>
+                );
               })}
               <label htmlFor="image[]" className="new-image">
                 <FiPlus size={24} color="#15b6d6" />
@@ -144,20 +178,12 @@ function CreateInstitutionComponent() {
 
           <div className="input-block">
             <label htmlFor="instructions">Instrucciones</label>
-            <textarea
-              id="instructions"
-              value={instructions}
-              onChange={(e) => setInstructions(e.target.value)}
-            />
+            <textarea id="instructions" onBlur={(e) => setInstructions(e.target.value)} />
           </div>
 
           <div className="input-block">
             <label htmlFor="opening_hours">Horario de apertura</label>
-            <input
-              id="opening_hours"
-              value={opening_hours}
-              onChange={(e) => setOpeningHours(e.target.value)}
-            />
+            <input id="opening_hours" onBlur={(e) => setOpeningHours(e.target.value)} />
           </div>
 
           <div className="input-block">

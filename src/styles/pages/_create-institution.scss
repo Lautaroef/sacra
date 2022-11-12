@@ -89,20 +89,46 @@ form.create-institution-form {
       grid-template-columns: repeat(4, 1fr);
       grid-gap: 16px;
 
-      img {
+      .thumbnail {
+        width: 100%;
+        position: relative;
+        border-radius: 16px;
+        height: 96px;
+        width: 122.5px;
+
+        img {
+          border-radius: 16px;
+        }
+
+        button {
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
+          position: absolute;
+          top: 25;
+          right: 25;
+          margin-right: 5px;
+          margin-top: 5px;
+          width: 100%;
+          color: #b30000;
+          text-align: right;
+          cursor: auto;
+          z-index: 1;
+        }
+      }
+
+      .new-image {
+        height: 96px;
+        background: #f5f8fa;
+        border: 1px dashed #96d2f0;
         border-radius: 20px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
-    .new-image {
-      height: 96px;
-      background: #f5f8fa;
-      border: 1px dashed #96d2f0;
-      border-radius: 20px;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+
     input[type="file"] {
       display: none;
     }
