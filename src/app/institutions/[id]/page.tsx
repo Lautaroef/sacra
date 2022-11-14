@@ -1,24 +1,18 @@
-// import { use } from "react";
+import { use } from "react";
+import Map from "../Map";
 import { getInstitution, getInstitutions } from "server/controllers/institutions";
 
-import Map from "../Map";
-import InstitutionImages from "./InstitutionImages";
+import ImagesComponent from "./ImagesComponent";
 import { FaWhatsapp as FaWhatsApp } from "react-icons/fa";
 import { FiClock, FiInfo } from "react-icons/fi";
 
-export async function generateStaticParams() {
-  let institutions = await getInstitutions();
-
-  return institutions.map((institution) => ({ id: institution.id.toString() }));
-}
-
 function SingleInstitutionComponent({ params }: { params: { id: string } }) {
-  const institution = getInstitution(parseInt(params.id)) as any;
+  const institution = use(getInstitution(parseInt(params.id)));
 
   return (
     <main id="page-institution">
       <div className="institution-details">
-        <InstitutionImages institution={institution} />
+        <ImagesComponent institution={institution} />
 
         <div className="institution-details-content">
           <h1>{institution.name}</h1>
@@ -27,8 +21,7 @@ function SingleInstitutionComponent({ params }: { params: { id: string } }) {
           <div className="map-container">
             <Map
               zoom={16}
-              interactive={false}
-              markers={[institution]}
+              markers={institution}
               style={{ width: "100%", height: 280 }}
               center={[institution.latitude, institution.longitude]}
             />
@@ -62,10 +55,9 @@ function SingleInstitutionComponent({ params }: { params: { id: string } }) {
                 fin de semana
               </div>
             ) : (
-              <div className="open-on-weekends dont-open">
+              <div className="open-on-weekends close-on-weekends">
                 <FiInfo size={32} color="#FF669D" />
-                No atendemos durante el <br />
-                fin de semana
+                No atendemos durante el fin de semana
               </div>
             )}
           </div>
@@ -78,6 +70,12 @@ function SingleInstitutionComponent({ params }: { params: { id: string } }) {
       </div>
     </main>
   );
+}
+
+export async function generateStaticParams() {
+  const institutions = await getInstitutions();
+
+  return institutions.map((institution) => ({ id: institution.id.toString() }));
 }
 
 export default SingleInstitutionComponent;

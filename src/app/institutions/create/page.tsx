@@ -1,30 +1,69 @@
 "use client";
+import type { CreateInstitutionWithImages, InstitutePosition } from "types";
 import type { LeafletMouseEvent } from "leaflet";
 
-import { useState, FormEvent, ChangeEvent } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import dynamic from "next/dynamic";
-import { createInstitution } from "server/controllers/institutions";
 
+import Map from "app/institutions/Map";
 import { FiPlus, FiX } from "react-icons/fi";
 
-const Map = dynamic(() => import("app/institutions/Map"), {
-  loading: () => <p>Cargando mapa...</p>,
-  ssr: false,
-});
-
 function CreateInstitutionComponent() {
-  const router = useRouter();
-
   const [position, setPosition] = useState<InstitutePosition>({ latitude: 0, longitude: 0 });
   const [name, setName] = useState<string>("");
   const [about, setAbout] = useState<string>("");
   const [instructions, setInstructions] = useState<string>("");
   const [opening_hours, setOpeningHours] = useState<string>("");
   const [open_on_weekends, setOpenOnWeekends] = useState<boolean>(true);
-  const [images, setImages] = useState<File[]>([]);
-  const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [blobImages, setBlobImages] = useState<string[]>([]);
+  const router = useRouter();
+
+  const institution: CreateInstitutionWithImages = {
+    name,
+    about,
+    instructions,
+    opening_hours,
+    open_on_weekends,
+    latitude: position.latitude,
+    longitude: position.longitude,
+    images: blobImages,
+  };
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+    console.log(institution);
+    // Check if all fields are filled
+    // if not, alert the user
+    // if yes, create the institution
+    if (
+      !name ||
+      !about ||
+      !instructions ||
+      !opening_hours ||
+      !position.latitude ||
+      !position.longitude ||
+      blobImages.length === 0
+    ) {
+      alert("Por favor, complete los 7 campos");
+    } else {
+      await fetch("/api/institutions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(institution),
+      }).then((res) => {
+        if (res.status === 200 || res.status === 201) {
+          console.log(res);
+          alert("Institución creada con éxito");
+          router.push("/institutions");
+        } else {
+          alert("Error al crear la institución");
+        }
+      });
+    }
+  }
 
   // create function that creates a marker on the position clicked
   function handleMapClick(event: LeafletMouseEvent) {
@@ -32,84 +71,22 @@ function CreateInstitutionComponent() {
     setPosition({ latitude: lat, longitude: lng });
   }
 
+  // handle addition and removal of images
   function handleSelectImages(event: ChangeEvent<HTMLInputElement>) {
     if (!event.target.files) {
       return;
     }
-    console.log(event.target.files);
 
     const selectedImages: File[] = Array.from(event.target.files);
-    // const urlsStrings: string[] = selectedImages.map((image) => URL.createObjectURL(image));
-    setImages((prev) => [...prev, ...selectedImages]);
-
-    const selectedImagesPreview = selectedImages.map((image) => {
-      return URL.createObjectURL(image);
-    });
-    setPreviewImages((prev) => [...prev, ...selectedImagesPreview]);
+    const urlsStrings: string[] = selectedImages.map((image) => URL.createObjectURL(image));
+    setBlobImages((prev: any) => [...prev, ...urlsStrings]);
   }
 
   const removeImage = (index: number) => {
-    const newImages = images.filter((_, i) => i !== index);
-    setImages(newImages);
-    const newPreviewImages = previewImages.filter((_, i) => i !== index);
-    setPreviewImages(newPreviewImages);
+    const newImages = blobImages.filter((image, i) => i !== index);
+    setBlobImages(newImages);
   };
 
-  console.log({
-    name,
-    about,
-    position,
-    instructions,
-    opening_hours,
-    open_on_weekends,
-    images,
-  });
-  async function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-
-    const { latitude, longitude } = position;
-
-    if (
-      !name ||
-      !about ||
-      !latitude ||
-      !longitude ||
-      !instructions ||
-      !opening_hours ||
-      !open_on_weekends ||
-      !images
-    ) {
-      alert("Por favor, complete todos los 7 campos");
-    }
-
-    // data.append("name", name);
-    // data.append("about", about);
-    // data.append("latitude", String(latitude));
-    // data.append("longitude", String(longitude));
-    // data.append("instructions", instructions);
-    // data.append("opening_hours", opening_hours);
-    // data.append("open_on_weekends", String(open_on_weekends));
-    // images.forEach((image) => {
-    //   data.append("images", image);
-    // });
-
-    // createInstitution({
-    //   name,
-    //   about,
-    //   latitude: position.latitude,
-    //   longitude: position.longitude,
-    //   instructions,
-    //   opening_hours,
-    //   open_on_weekends,
-    //   images: images.map((image) => ({
-    //     path: image,
-    //   })) as any,
-    // });
-
-    alert("Institución creada con éxito!");
-
-    router?.push("/institutions");
-  }
   return (
     <main id="page-create-institution">
       <form className="create-institution-form" onSubmit={handleSubmit}>
@@ -120,18 +97,10 @@ function CreateInstitutionComponent() {
             center={[-24.8421731, -65.5109202]}
             style={{ width: "100%", height: 280 }}
             onClick={handleMapClick}
-            markers={{
-              name,
-              latitude: position.latitude,
-              longitude: position.longitude,
-              about,
-              instructions,
-              opening_hours,
-              open_on_weekends,
-            }}
+            markers={institution}
           />
           <small>
-            Hace click en el mapa para seleccionar el punto de la nueva institución.
+            Haga click en el mapa para seleccionar el punto de la nueva institución.
           </small>
 
           <div className="input-block" style={{ marginTop: "1.5rem" }}>
@@ -150,14 +119,15 @@ function CreateInstitutionComponent() {
             <label htmlFor="images">Imágenes</label>
 
             <div className="images-container">
-              {previewImages.map((image) => {
+              {blobImages.map((image, i) => {
                 return (
                   <div className="thumbnail">
-                    <Image alt={name} key={image} src={image} fill />
+                    {/* @ts-ignore */}
+                    <Image alt={name} key={i} src={image} fill />
                     <button
                       type="button"
                       className="close-button-absolute"
-                      onClick={() => removeImage(previewImages.indexOf(image))}
+                      onClick={() => removeImage(blobImages.indexOf(image))}
                     >
                       <FiX size={16} color="#FF669D" />
                     </button>
@@ -207,7 +177,6 @@ function CreateInstitutionComponent() {
             </div>
           </div>
         </fieldset>
-
         <button className="confirm-button" type="submit">
           Confirmar
         </button>

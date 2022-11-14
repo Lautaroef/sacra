@@ -1,19 +1,13 @@
 import { use } from "react";
 import Link from "next/link";
 import Map from "./Map";
-
-import { FiPlus } from "react-icons/fi";
 import { getInstitutions } from "server/controllers/institutions";
+
 import SideBar from "./SideBar";
+import { FiPlus } from "react-icons/fi";
 
 function InstitutionsComponent() {
   const institutions = use(getInstitutions());
-  // console.log(institutions);
-  console.log(
-    "Institution's length: ",
-    institutions?.length,
-    institutions?.length > 0 ? "✅" : "❌"
-  );
 
   return (
     <div id="page-map">
@@ -25,11 +19,11 @@ function InstitutionsComponent() {
         style={{ width: "100%", height: "100%" }}
         className="leaflet-container"
       />
-      <div>
+      <button aria-label="Agregar institución" title="Agregar institución">
         <Link href="/institutions/create" className="create-institution">
           <FiPlus size={32} color="#FFF" />
         </Link>
-      </div>
+      </button>
     </div>
   );
 }

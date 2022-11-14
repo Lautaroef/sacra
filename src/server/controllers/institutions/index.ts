@@ -1,4 +1,5 @@
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
+import type { CreateInstitutionWithImages } from "types";
 import { prisma } from "server/db/client";
 import uploadImagesToIMGBB from "lib/uploadImageToIBB";
 import * as Yup from "yup";
@@ -29,9 +30,17 @@ export async function getInstitution(id: number) {
   return institution;
 }
 
-export async function createInstitution(data: Prisma.institutionCreateInput) {
-  const { name, latitude, longitude, about, instructions, opening_hours, open_on_weekends } =
-    data;
+export async function createInstitution(data: CreateInstitutionWithImages) {
+  const {
+    name,
+    latitude,
+    longitude,
+    about,
+    instructions,
+    opening_hours,
+    open_on_weekends,
+    images,
+  } = data;
 
   const schema = Yup.object().shape({
     name: Yup.string().required(),
@@ -52,7 +61,7 @@ export async function createInstitution(data: Prisma.institutionCreateInput) {
     abortEarly: false,
   });
 
-  const imageUrls = await uploadImagesToIMGBB(data?.images as { path: string }[]);
+  const imageUrls = await uploadImagesToIMGBB(images);
 
   const institution = await prisma.institution?.create({
     data: {
@@ -72,8 +81,16 @@ export async function createInstitution(data: Prisma.institutionCreateInput) {
 }
 
 export async function updateInstitution(id: number, data: Prisma.institutionUpdateInput) {
-  const { name, latitude, longitude, about, instructions, opening_hours, open_on_weekends } =
-    data;
+  const {
+    name,
+    latitude,
+    longitude,
+    about,
+    instructions,
+    opening_hours,
+    open_on_weekends,
+    images,
+  } = data;
 
   const schema = Yup.object().shape({
     name: Yup.string().required(),
@@ -94,7 +111,7 @@ export async function updateInstitution(id: number, data: Prisma.institutionUpda
     abortEarly: false,
   });
 
-  const imageUrls = await uploadImagesToIMGBB(data?.images as { path: string }[]);
+  const imageUrls = await uploadImagesToIMGBB(images as string[]);
 
   const institution = await prisma.institution?.update({
     where: {

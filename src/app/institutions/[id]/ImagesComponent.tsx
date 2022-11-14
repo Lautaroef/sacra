@@ -6,9 +6,9 @@ import { useState } from "react";
 
 type Institution = institution & { images: image[] };
 
-function InstitutionImages({ institution }: { institution: Institution }) {
+function ImagesComponent({ institution }: { institution: Institution }) {
   const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
-  console.log(institution);
+
   return (
     <>
       <Image
@@ -20,12 +20,12 @@ function InstitutionImages({ institution }: { institution: Institution }) {
       <div className="images">
         {institution.images.map((image, index) => (
           <button
+            type="button"
             key={image.id.toString()}
             className={activeImageIndex === index ? "active" : ""}
-            type="button"
             onClick={() => setActiveImageIndex(index)}
           >
-            <Image src={image.path} alt={institution.name} width={64} height={64} />
+            <Image src={image.path} alt={institution.name} fill />
           </button>
         ))}
       </div>
@@ -33,4 +33,4 @@ function InstitutionImages({ institution }: { institution: Institution }) {
   );
 }
 
-export default InstitutionImages;
+export default ImagesComponent;

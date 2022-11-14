@@ -8,7 +8,7 @@ function Page() {
   return (
     <div id="page-landing" className="App">
       <div className="content-wrapper">
-        <Image priority src={logoImg} alt="SACRA" width={92} height={140} />
+        <Image priority src={logoImg} alt="SACRA" width={88} height={132} />
         <main>
           <h1>Lleve felicidad al mundo</h1>
           <p>Visite nuestras instituciones y cambia el día de muchos niños.</p>

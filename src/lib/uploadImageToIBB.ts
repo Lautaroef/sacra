@@ -1,19 +1,24 @@
 import axios from "axios";
 
-const uploadImagesToIMGBB = async (images: { path: string }[]) => {
+const uploadImagesToIMGBB = async (images: string[]) => {
   const urls: string[] = [];
 
-  for (let i = 0; i < images.length; i++) {
-    const formData = new FormData();
-    formData.append("image", images[i].path);
-    const response = await axios.post(process.env.NEXT_PUBLIC_IMGBB_API_URL!, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
+  for (const image of images) {
+    const response = await axios.post(
+      process.env.NEXT_PUBLIC_IMGBB_API_URL!,
+      {
+        image,
+        name: "image",
+        expiration: 3600,
       },
-    });
+      {
+        headers: {
+          Authorization: process.env.NEXT_PUBLIC_IMGBB_API_KEY!,
+        },
+      }
+    );
     urls.push(response.data.data.url);
   }
-
   return urls;
 };
 
