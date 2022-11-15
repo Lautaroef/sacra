@@ -1,5 +1,6 @@
 import { use } from "react";
-import Map from "components/leaflet-map/map";
+import dynamic from "next/dynamic";
+// import Map from "components/leaflet-map/map";
 import { getInstitution, getInstitutions } from "server/controllers/institutions";
 
 import ImagesComponent from "./ImagesComponent";
@@ -13,6 +14,10 @@ import { FiClock, FiInfo } from "react-icons/fi";
 //   const institutions = await getInstitutions();
 //   return institutions.map((institution) => ({ id: institution.id.toString() }));
 // }
+
+const Map = dynamic(() => import("components/leaflet-map/map"), {
+  ssr: false,
+});
 
 function SingleInstitutionComponent({ params }: { params: { id: string } }) {
   const institution = use(getInstitution(parseInt(params.id)));

@@ -4,10 +4,15 @@ import type { LeafletMouseEvent } from "leaflet";
 
 import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 
-import Map from "components/leaflet-map/map";
+// import Map from "components/leaflet-map/map";
 import { FiPlus, FiX } from "react-icons/fi";
+
+const Map = dynamic(() => import("components/leaflet-map/map"), {
+  ssr: false,
+});
 
 function CreateInstitutionComponent() {
   const [position, setPosition] = useState<InstitutePosition>({ latitude: 0, longitude: 0 });

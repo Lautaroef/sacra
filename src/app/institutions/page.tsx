@@ -1,10 +1,15 @@
 import { use } from "react";
 import Link from "next/link";
-import Map from "components/leaflet-map/map";
+import dynamic from "next/dynamic";
+// import Map from "components/leaflet-map/map";
 import { getInstitutions } from "server/controllers/institutions";
 
 import SideBar from "./SideBar";
 import { FiPlus } from "react-icons/fi";
+
+const Map = dynamic(() => import("components/leaflet-map/map"), {
+  ssr: false,
+});
 
 function InstitutionsComponent() {
   const institutions = use(getInstitutions());

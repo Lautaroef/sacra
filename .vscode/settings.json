@@ -1,5 +1,9 @@
 {
-  "cSpell.words": ["cloudinary", "IMGBB", "latlng"],
-  "typescript.tsdk": "./node_modules/typescript/lib",
+  "cSpell.words": [
+    "cloudinary",
+    "IMGBB",
+    "latlng"
+  ],
+  "typescript.tsdk": "node_modules\\typescript\\lib",
   "typescript.enablePromptUseWorkspaceTsdk": true
 }
