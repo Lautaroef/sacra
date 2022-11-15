@@ -4,6 +4,14 @@ import Image from "next/image";
 import logoImg from "../../public/static/images/logo.png";
 import { FiArrowRight } from "react-icons/fi";
 
+/*
+TODOS:
+
+!TO FIX:
+- Fix the error in the /institutions/[id]/page.tsx that runs when I include the 
+generateStaticParams function. The error is: "ReferenceError: window is not defined"
+*/
+
 function Page() {
   return (
     <div id="page-landing" className="App">
