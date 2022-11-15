@@ -10,10 +10,10 @@ import { FiClock, FiInfo } from "react-icons/fi";
 /* 
   This function below is causing the error 'window is not defined'.
 */
-// export async function generateStaticParams() {
-//   const institutions = await getInstitutions();
-//   return institutions.map((institution) => ({ id: institution.id.toString() }));
-// }
+export async function generateStaticParams() {
+  const institutions = await getInstitutions();
+  return institutions.map((institution) => ({ id: institution.id.toString() }));
+}
 
 const Map = dynamic(() => import("components/leaflet-map/map"), {
   ssr: false,
