@@ -6,7 +6,7 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 
-import Map from "app/institutions/Map";
+import Map from "components/leaflet-map/map";
 import { FiPlus, FiX } from "react-icons/fi";
 
 function CreateInstitutionComponent() {
@@ -16,7 +16,7 @@ function CreateInstitutionComponent() {
   const [instructions, setInstructions] = useState<string>("");
   const [opening_hours, setOpeningHours] = useState<string>("");
   const [open_on_weekends, setOpenOnWeekends] = useState<boolean>(true);
-  const [blobImages, setBlobImages] = useState<string[]>([]);
+  const [previewSources, setPreviewSources] = useState<string[]>([]);
   const router = useRouter();
 
   const institution: CreateInstitutionWithImages = {
@@ -27,7 +27,7 @@ function CreateInstitutionComponent() {
     open_on_weekends,
     latitude: position.latitude,
     longitude: position.longitude,
-    images: blobImages,
+    images: previewSources,
   };
 
   async function handleSubmit(e: FormEvent) {
@@ -43,7 +43,7 @@ function CreateInstitutionComponent() {
       !opening_hours ||
       !position.latitude ||
       !position.longitude ||
-      blobImages.length === 0
+      previewSources.length === 0
     ) {
       alert("Por favor, complete los 7 campos");
     } else {
@@ -54,10 +54,9 @@ function CreateInstitutionComponent() {
         },
         body: JSON.stringify(institution),
       }).then((res) => {
-        if (res.status === 200 || res.status === 201) {
-          console.log(res);
+        if (res.status === 200) {
           alert("Institución creada con éxito");
-          router.push("/institutions");
+          router?.push("/institutions");
         } else {
           alert("Error al crear la institución");
         }
@@ -73,18 +72,25 @@ function CreateInstitutionComponent() {
 
   // handle addition and removal of images
   function handleSelectImages(event: ChangeEvent<HTMLInputElement>) {
-    if (!event.target.files) {
-      return;
-    }
+    const files = event.target.files;
+    if (!files) return;
 
-    const selectedImages: File[] = Array.from(event.target.files);
-    const urlsStrings: string[] = selectedImages.map((image) => URL.createObjectURL(image));
-    setBlobImages((prev: any) => [...prev, ...urlsStrings]);
+    let file;
+
+    for (let i = 0; i < files.length; i++) {
+      const reader = new FileReader(); // this must be inside the loop,
+      // otherwise it results in an error saying that the reader is busy reading another file
+      file = files[i];
+      reader.onloadend = () => {
+        setPreviewSources((prev) => [...prev, reader.result as string]);
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   const removeImage = (index: number) => {
-    const newImages = blobImages.filter((image, i) => i !== index);
-    setBlobImages(newImages);
+    const newImages = previewSources.filter((image, i) => i !== index);
+    setPreviewSources(newImages);
   };
 
   return (
@@ -99,9 +105,15 @@ function CreateInstitutionComponent() {
             onClick={handleMapClick}
             markers={institution}
           />
-          <small>
-            Haga click en el mapa para seleccionar el punto de la nueva institución.
-          </small>
+          {/* 
+          <CloduinaryContext cloudName="sacra">
+            <div>
+              <Image publicId="sample" width="50" />
+            </div>
+            <Image publicId="sample" width="0.5" />
+          </CloduinaryContext>
+          */}
+          <small>Seleccione en el mapa el punto de la nueva institución.</small>
 
           <div className="input-block" style={{ marginTop: "1.5rem" }}>
             <label htmlFor="name">Nombre</label>
@@ -110,30 +122,27 @@ function CreateInstitutionComponent() {
 
           <div className="input-block">
             <label htmlFor="about">
-              Descripción <span>Máximo de 300 caracteres</span>
+              Descripción <span>Máximo de 600 caracteres</span>
             </label>
-            <textarea id="name" maxLength={300} onBlur={(e) => setAbout(e.target.value)} />
+            <textarea id="name" maxLength={600} onBlur={(e) => setAbout(e.target.value)} />
           </div>
 
           <div className="input-block">
             <label htmlFor="images">Imágenes</label>
 
             <div className="images-container">
-              {blobImages.map((image, i) => {
-                return (
-                  <div className="thumbnail">
-                    {/* @ts-ignore */}
-                    <Image alt={name} key={i} src={image} fill />
-                    <button
-                      type="button"
-                      className="close-button-absolute"
-                      onClick={() => removeImage(blobImages.indexOf(image))}
-                    >
-                      <FiX size={16} color="#FF669D" />
-                    </button>
-                  </div>
-                );
-              })}
+              {previewSources.map((image, i) => (
+                <div key={i} className="thumbnail">
+                  <Image alt={name} key={i} src={image} fill />
+                  <button
+                    type="button"
+                    className="close-button-absolute"
+                    onClick={() => removeImage(previewSources.indexOf(image))}
+                  >
+                    <FiX size={16} color="#FF669D" />
+                  </button>
+                </div>
+              ))}
               <label htmlFor="image[]" className="new-image">
                 <FiPlus size={24} color="#15b6d6" />
               </label>
@@ -186,3 +195,6 @@ function CreateInstitutionComponent() {
 }
 
 export default CreateInstitutionComponent;
+
+// Descripcion de La Nueva Institucion
+// Instrucciones de La Nueva Institucion

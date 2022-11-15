@@ -6,7 +6,7 @@ const nextConfig = {
     appDir: true,
   },
   images: {
-    domains: ["i.ibb.co"],
+    domains: ["i.ibb.co", "res.cloudinary.com"],
   },
 };
 

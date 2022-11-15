@@ -1,14 +1,21 @@
 import { use } from "react";
-import Map from "../Map";
+import Map from "components/leaflet-map/map";
 import { getInstitution, getInstitutions } from "server/controllers/institutions";
 
 import ImagesComponent from "./ImagesComponent";
 import { FaWhatsapp as FaWhatsApp } from "react-icons/fa";
 import { FiClock, FiInfo } from "react-icons/fi";
 
+/* 
+  This function below is causing the error 'window is not defined'.
+*/
+// export async function generateStaticParams() {
+//   const institutions = await getInstitutions();
+//   return institutions.map((institution) => ({ id: institution.id.toString() }));
+// }
+
 function SingleInstitutionComponent({ params }: { params: { id: string } }) {
   const institution = use(getInstitution(parseInt(params.id)));
-
   return (
     <main id="page-institution">
       <div className="institution-details">
@@ -70,12 +77,6 @@ function SingleInstitutionComponent({ params }: { params: { id: string } }) {
       </div>
     </main>
   );
-}
-
-export async function generateStaticParams() {
-  const institutions = await getInstitutions();
-
-  return institutions.map((institution) => ({ id: institution.id.toString() }));
 }
 
 export default SingleInstitutionComponent;

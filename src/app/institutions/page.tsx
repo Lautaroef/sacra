@@ -1,6 +1,6 @@
 import { use } from "react";
 import Link from "next/link";
-import Map from "./Map";
+import Map from "components/leaflet-map/map";
 import { getInstitutions } from "server/controllers/institutions";
 
 import SideBar from "./SideBar";

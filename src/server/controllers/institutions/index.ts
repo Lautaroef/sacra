@@ -1,7 +1,6 @@
 import type { Prisma } from "@prisma/client";
-import type { CreateInstitutionWithImages } from "types";
 import { prisma } from "server/db/client";
-import uploadImagesToIMGBB from "lib/uploadImageToIBB";
+import uploadImageToCloudinary from "lib/uploadImageToCloudinary";
 import * as Yup from "yup";
 
 export async function getInstitutions() {
@@ -27,56 +26,6 @@ export async function getInstitution(id: number) {
   if (!institution) {
     throw new Error("Institution not found");
   }
-  return institution;
-}
-
-export async function createInstitution(data: CreateInstitutionWithImages) {
-  const {
-    name,
-    latitude,
-    longitude,
-    about,
-    instructions,
-    opening_hours,
-    open_on_weekends,
-    images,
-  } = data;
-
-  const schema = Yup.object().shape({
-    name: Yup.string().required(),
-    latitude: Yup.number().required(),
-    longitude: Yup.number().required(),
-    about: Yup.string().required().max(300),
-    instructions: Yup.string().required(),
-    opening_hours: Yup.string().required(),
-    open_on_weekends: Yup.boolean().required(),
-    images: Yup.array(
-      Yup.object().shape({
-        path: Yup.string().required(),
-      })
-    ),
-  });
-
-  await schema.validate(data, {
-    abortEarly: false,
-  });
-
-  const imageUrls = await uploadImagesToIMGBB(images);
-
-  const institution = await prisma.institution?.create({
-    data: {
-      name,
-      latitude,
-      longitude,
-      about,
-      instructions,
-      opening_hours,
-      open_on_weekends,
-      images: {
-        create: imageUrls.map((url) => ({ path: url })),
-      },
-    },
-  });
   return institution;
 }
 
@@ -111,7 +60,11 @@ export async function updateInstitution(id: number, data: Prisma.institutionUpda
     abortEarly: false,
   });
 
-  const imageUrls = await uploadImagesToIMGBB(images as string[]);
+  const imageUrls = await uploadImageToCloudinary(images as string[]);
+
+  if (!imageUrls) {
+    throw new Error("Error uploading images");
+  }
 
   const institution = await prisma.institution?.update({
     where: {
