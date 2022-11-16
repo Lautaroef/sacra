@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 import { FiPlus, FiX } from "react-icons/fi";
+import Map from "components/leaflet-map/map";
 
 async function CreateInstitutionComponent() {
   const [position, setPosition] = useState<InstitutePosition>({ latitude: 0, longitude: 0 });
@@ -18,8 +19,8 @@ async function CreateInstitutionComponent() {
   const [previewSources, setPreviewSources] = useState<string[]>([]);
   const router = useRouter();
 
-  // Already tried importing the Map component using next/dynamic but the error persists (window is not defined)
-  const Map = (await import("components/leaflet-map/map")).default;
+  // // Already tried importing the Map component using next/dynamic but the error persists (window is not defined)
+  // const Map = (await import("components/leaflet-map/map")).default;
 
   const institution: CreateInstitutionWithImages = {
     name,
@@ -99,14 +100,16 @@ async function CreateInstitutionComponent() {
     <main id="page-create-institution">
       <form className="create-institution-form" onSubmit={handleSubmit}>
         <fieldset>
-          <legend>Institución</legend>
-          <Map
-            zoom={12.5}
-            center={[-24.8421731, -65.5109202]}
-            style={{ width: "100%", height: 280 }}
-            onClick={handleMapClick}
-            markers={institution}
-          />
+          <legend>Institución</legend>{" "}
+          {typeof window !== "undefined" && (
+            <Map
+              zoom={12.5}
+              center={[-24.8421731, -65.5109202]}
+              style={{ width: "100%", height: 280 }}
+              onClick={handleMapClick}
+              markers={institution}
+            />
+          )}
           {/* 
           <CloduinaryContext cloudName="sacra">
             <div>
@@ -116,19 +119,16 @@ async function CreateInstitutionComponent() {
           </CloduinaryContext>
           */}
           <small>Seleccione en el mapa el punto de la nueva institución.</small>
-
           <div className="input-block" style={{ marginTop: "1.5rem" }}>
             <label htmlFor="name">Nombre</label>
             <input id="name" onBlur={(e) => setName(e.target.value)} />
           </div>
-
           <div className="input-block">
             <label htmlFor="about">
               Descripción <span>Máximo de 600 caracteres</span>
             </label>
             <textarea id="name" maxLength={600} onBlur={(e) => setAbout(e.target.value)} />
           </div>
-
           <div className="input-block">
             <label htmlFor="images">Imágenes</label>
 
