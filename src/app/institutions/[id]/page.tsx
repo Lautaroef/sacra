@@ -1,6 +1,3 @@
-import { use } from "react";
-import dynamic from "next/dynamic";
-// import Map from "components/leaflet-map/map";
 import { getInstitution, getInstitutions } from "server/controllers/institutions";
 
 import ImagesComponent from "./ImagesComponent";
@@ -10,17 +7,17 @@ import { FiClock, FiInfo } from "react-icons/fi";
 /* 
   This function below is causing the error 'window is not defined'.
 */
-export async function generateStaticParams() {
-  const institutions = await getInstitutions();
-  return institutions.map((institution) => ({ id: institution.id.toString() }));
-}
+// export async function generateStaticParams() {
+//   const institutions = await getInstitutions();
+//   return institutions.map((institution) => ({ id: institution.id.toString() }));
+// }
 
-const Map = dynamic(() => import("components/leaflet-map/map"), {
-  ssr: false,
-});
+async function SingleInstitutionComponent({ params }: { params: { id: string } }) {
+  const institution = await getInstitution(parseInt(params.id));
 
-function SingleInstitutionComponent({ params }: { params: { id: string } }) {
-  const institution = use(getInstitution(parseInt(params.id)));
+  // Already tried importing the Map component using next/dynamic but the error persists (window is not defined)
+  const Map = (await import("components/leaflet-map/map")).default;
+
   return (
     <main id="page-institution">
       <div className="institution-details">

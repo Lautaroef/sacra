@@ -1,18 +1,14 @@
-import { use } from "react";
 import Link from "next/link";
-import dynamic from "next/dynamic";
-// import Map from "components/leaflet-map/map";
 import { getInstitutions } from "server/controllers/institutions";
 
 import SideBar from "./SideBar";
 import { FiPlus } from "react-icons/fi";
 
-const Map = dynamic(() => import("components/leaflet-map/map"), {
-  ssr: false,
-});
+async function InstitutionsComponent() {
+  const institutions = await getInstitutions();
 
-function InstitutionsComponent() {
-  const institutions = use(getInstitutions());
+  // Already tried importing the Map component using next/dynamic but the error persists (window is not defined)
+  const Map = (await import("components/leaflet-map/map")).default;
 
   return (
     <div id="page-map">
