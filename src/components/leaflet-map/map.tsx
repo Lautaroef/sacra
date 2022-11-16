@@ -3,10 +3,11 @@
 import type { InstitutionOptionalId } from "types";
 import type { LeafletMouseEvent } from "leaflet";
 import Link from "next/link";
-import { MapContainer, TileLayer, Popup } from "react-leaflet";
+import dynamic from "next/dynamic";
+// import { MapContainer, TileLayer, Popup } from "react-leaflet";
 import { FiArrowRight } from "react-icons/fi";
 import leafletMapIcon from "../../utils/leafletMapIcon";
-import LocationMarker from "components/leaflet-map/LocationMarker";
+// import LocationMarker from "components/leaflet-map/LocationMarker";
 import "leaflet/dist/leaflet.css"; // in case the map is not visible
 
 type MapComponentOptions = {
@@ -17,6 +18,20 @@ type MapComponentOptions = {
   className?: string;
   onClick?: (e: LeafletMouseEvent) => void;
 };
+
+const LocationMarker = dynamic(() => import("components/leaflet-map/LocationMarker"), {
+  ssr: false,
+});
+// dynamically import MapContainer, TileLayer, Popup from react-leaflet
+const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), {
+  ssr: false,
+});
+const TileLayer = dynamic(() => import("react-leaflet").then((mod) => mod.TileLayer), {
+  ssr: false,
+});
+const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), {
+  ssr: false,
+});
 
 const Map = ({ markers, center, zoom, style, onClick, className }: MapComponentOptions) => {
   return (
