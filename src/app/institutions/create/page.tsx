@@ -4,17 +4,11 @@ import type { LeafletMouseEvent } from "leaflet";
 
 import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 
-// import Map from "components/leaflet-map/map";
 import { FiPlus, FiX } from "react-icons/fi";
 
-const Map = dynamic(() => import("components/leaflet-map/map"), {
-  ssr: false,
-});
-
-function CreateInstitutionComponent() {
+async function CreateInstitutionComponent() {
   const [position, setPosition] = useState<InstitutePosition>({ latitude: 0, longitude: 0 });
   const [name, setName] = useState<string>("");
   const [about, setAbout] = useState<string>("");
@@ -23,6 +17,9 @@ function CreateInstitutionComponent() {
   const [open_on_weekends, setOpenOnWeekends] = useState<boolean>(true);
   const [previewSources, setPreviewSources] = useState<string[]>([]);
   const router = useRouter();
+
+  // Already tried importing the Map component using next/dynamic but the error persists (window is not defined)
+  const Map = (await import("components/leaflet-map/map")).default;
 
   const institution: CreateInstitutionWithImages = {
     name,
