@@ -3,7 +3,8 @@ import { getInstitution, getInstitutions } from "server/controllers/institutions
 import ImagesComponent from "./ImagesComponent";
 import { FaWhatsapp as FaWhatsApp } from "react-icons/fa";
 import { FiClock, FiInfo } from "react-icons/fi";
-import Map from "components/leaflet-map/map";
+// import Map from "components/leaflet-map/map";
+import dynamic from "next/dynamic";
 
 /* 
   This function below is causing the error 'window is not defined'.
@@ -16,8 +17,7 @@ import Map from "components/leaflet-map/map";
 async function SingleInstitutionComponent({ params }: { params: { id: string } }) {
   const institution = await getInstitution(parseInt(params.id));
 
-  // // Already tried importing the Map component using next/dynamic but the error persists (window is not defined)
-  // const Map = (await import("components/leaflet-map/map")).default;
+  const Map = dynamic(() => import("components/leaflet-map/map"), { ssr: false });
 
   return (
     <main id="page-institution">

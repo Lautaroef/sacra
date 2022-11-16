@@ -7,7 +7,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 import { FiPlus, FiX } from "react-icons/fi";
-import Map from "components/leaflet-map/map";
+// import Map from "components/leaflet-map/map";
+import dynamic from "next/dynamic";
 
 async function CreateInstitutionComponent() {
   const [position, setPosition] = useState<InstitutePosition>({ latitude: 0, longitude: 0 });
@@ -19,8 +20,7 @@ async function CreateInstitutionComponent() {
   const [previewSources, setPreviewSources] = useState<string[]>([]);
   const router = useRouter();
 
-  // // Already tried importing the Map component using next/dynamic but the error persists (window is not defined)
-  // const Map = (await import("components/leaflet-map/map")).default;
+  const Map = dynamic(() => import("components/leaflet-map/map"), { ssr: false });
 
   const institution: CreateInstitutionWithImages = {
     name,
@@ -110,14 +110,6 @@ async function CreateInstitutionComponent() {
               markers={institution}
             />
           )}
-          {/* 
-          <CloduinaryContext cloudName="sacra">
-            <div>
-              <Image publicId="sample" width="50" />
-            </div>
-            <Image publicId="sample" width="0.5" />
-          </CloduinaryContext>
-          */}
           <small>Seleccione en el mapa el punto de la nueva institución.</small>
           <div className="input-block" style={{ marginTop: "1.5rem" }}>
             <label htmlFor="name">Nombre</label>
