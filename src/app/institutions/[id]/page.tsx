@@ -5,6 +5,7 @@ import { FaWhatsapp as FaWhatsApp } from "react-icons/fa";
 import { FiClock, FiInfo } from "react-icons/fi";
 // import Map from "components/leaflet-map/map";
 import dynamic from "next/dynamic";
+import { use } from "react";
 
 /* 
   This function below is causing the error 'window is not defined'.
@@ -14,8 +15,8 @@ import dynamic from "next/dynamic";
 //   return institutions.map((institution) => ({ id: institution.id.toString() }));
 // }
 
-async function SingleInstitutionComponent({ params }: { params: { id: string } }) {
-  const institution = await getInstitution(parseInt(params.id));
+function SingleInstitutionComponent({ params }: { params: { id: string } }) {
+  const institution = use(getInstitution(parseInt(params.id)));
 
   const Map = dynamic(() => import("components/leaflet-map/map"), { ssr: false });
 

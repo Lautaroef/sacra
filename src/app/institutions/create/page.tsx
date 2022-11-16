@@ -10,7 +10,7 @@ import { FiPlus, FiX } from "react-icons/fi";
 // import Map from "components/leaflet-map/map";
 import dynamic from "next/dynamic";
 
-async function CreateInstitutionComponent() {
+function CreateInstitutionComponent() {
   const [position, setPosition] = useState<InstitutePosition>({ latitude: 0, longitude: 0 });
   const [name, setName] = useState<string>("");
   const [about, setAbout] = useState<string>("");
