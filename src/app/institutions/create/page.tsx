@@ -3,7 +3,7 @@ import type { CreateInstitutionWithImages, InstitutePosition } from "types";
 import type { LeafletMouseEvent } from "leaflet";
 
 import { useState, ChangeEvent, FormEvent } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 
