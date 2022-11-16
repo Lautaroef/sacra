@@ -23,6 +23,7 @@ async function main() {
       },
     },
   });
+
   const florida = await prisma.institution.create({
     data: {
       name: "SACRA Centro Educativo Terapéutico Escuela de Educación Especial Nº 8180",
@@ -66,6 +67,7 @@ async function main() {
       },
     },
   });
+
   const prado = await prisma.institution.create({
     data: {
       name: "El Prado Colleague",
