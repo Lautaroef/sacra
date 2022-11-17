@@ -20,12 +20,12 @@ They promote the inclusion of people with disabilities in our society by providi
 ### :camera: **Preview**
 
 - :movie_camera: **Tour 1**
-<p align="center"><img src="public/static/images/institutions-create.mp4"></p>
+<p align="center"><img src="public/static/images/sacra-create.gif"></p>
 
 #
 
 - :movie_camera: **Tour 2**
-<p align="center"><img src="public/static/images/institutions-single.mp4"></p>
+<p align="center"><img src="public/static/images/sacra-single.gif"></p>
 
 #
 
