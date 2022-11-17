@@ -1,4 +1,5 @@
-import { InstitutionOptionalId } from "types";
+"use client";
+import type { InstitutionOptionalId } from "types";
 import type { LeafletMouseEvent } from "leaflet";
 import { Marker, useMapEvents } from "react-leaflet";
 
