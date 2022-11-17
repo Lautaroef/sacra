@@ -34,7 +34,7 @@ They promote the inclusion of people with disabilities in our society by providi
 
 #
 
-- :round_pushpin: **Institution page**
+- :round_pushpin: **Institution's page**
 <p align="center"><img src="public/static/images/institution.png"></p>
 
 
