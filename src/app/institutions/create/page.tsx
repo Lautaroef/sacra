@@ -3,12 +3,11 @@ import type { CreateInstitutionWithImages, InstitutePosition } from "types";
 import type { LeafletMouseEvent } from "leaflet";
 
 import { useState, ChangeEvent, FormEvent } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import Map from "../Map";
 
 import { FiPlus, FiX } from "react-icons/fi";
-// import Map from "components/leaflet-map/map";
-import dynamic from "next/dynamic";
 
 function CreateInstitutionComponent() {
   const [position, setPosition] = useState<InstitutePosition>({ latitude: 0, longitude: 0 });
@@ -19,8 +18,6 @@ function CreateInstitutionComponent() {
   const [open_on_weekends, setOpenOnWeekends] = useState<boolean>(true);
   const [previewSources, setPreviewSources] = useState<string[]>([]);
   const router = useRouter();
-
-  const Map = dynamic(() => import("components/leaflet-map/map"), { ssr: false });
 
   const institution: CreateInstitutionWithImages = {
     name,
