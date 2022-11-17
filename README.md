@@ -1,37 +1,41 @@
 ## SACRA - Website for a Therapeutic Educational Center
 
-El sitio web de **SACRA** conecta a las personas con discapacidades con los Centros de Educacion Especial dentro de la ciudad de Salta, Argentina con el objectivo de mejorar las oportunidades y la dignidad de la persona con discapacidad.
+The **SACRA** website connects people with disabilities with Special Education Centers within the city of Salta, Argentina with the objective of improving the opportunities and dignity of the person with disabilities.
+They promote the inclusion of people with disabilities in our society by providing the necessary support for full and effective participation, on equal terms with others. :heart:
 
 ### :computer: Technologies used
 - React.js
 - Next.js
 - TypeScript
 - Node.js
-- Express
-- Leaflet (For displaying maps)
-- Yup (For input validations)
 - Prisma
-- PostgreSQL
+- PostgreSQL 
 
-:camera: **Preview images**
+### Other:
+- Cloudinary (For uploading and retrieving high-quality images)
+- Leaflet (For displaying interactive maps)
+- Yup (For input validations)
 
-- :house: **Home page**
-<p align="center"><img src="public/static/images/demo.gif"></p>
 
-#
+### :camera: **Preview**
 
-- :round_pushpin: **Map of Institutions**
-<p align="center"><img src="public/static/images/demo2.gif"></p>
-
-#
-
-- :movie_camera: **Tour**
-<p align="center"><img src="public/static/images/orphanage.png"></p>
+- :movie_camera: **Tour 1**
+<p align="center"><img src="public/static/images/institutions-create.mp4"></p>
 
 #
 
-- :movie_camera: **Tour Cadastro:**
-<p align="center"><img src="public/static/images/register-orphanage.png"></p>
+- :movie_camera: **Tour 2**
+<p align="center"><img src="public/static/images/institutions-single.mp4"></p>
+
+#
+
+- :round_pushpin: **Register institution**
+<p align="center"><img src="public/static/images/register-institution.png"></p>
+
+#
+
+- :round_pushpin: **Institution page**
+<p align="center"><img src="public/static/images/institution.png"></p>
 
 
 Developed by Lautaro Figueroa [linkedin.com/in/lautaro-figueroa-it](https://www.linkedin.com/in/lautaro-figueroa-it/)
