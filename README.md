@@ -5,11 +5,14 @@ They promote the inclusion of people with disabilities in our society by providi
 
 ### :computer: Technologies used
 - React.js
-- Next.js
+- Next.js 
 - TypeScript
 - Node.js
 - Prisma
-- PostgreSQL 
+- PostgreSQL
+
+Front End hosted on Vercel
+Back End hosted with SupaBase
 
 ### Other:
 - Cloudinary (For uploading and retrieving high-quality images)
