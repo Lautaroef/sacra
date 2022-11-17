@@ -11,14 +11,14 @@ They promote the inclusion of people with disabilities in our society by providi
 - Prisma
 - PostgreSQL
 
-Front End hosted on Vercel [Vercel](https://vercel.com/).
-
-Back End hosted with [SupaBase](https://supabase.com/).
-
 ### Other:
 - Cloudinary (For uploading and retrieving high-quality images)
 - Leaflet (For displaying interactive maps)
 - Yup (For input validations)
+
+Front End hosted on Vercel [Vercel](https://vercel.com/).
+
+ Back End hosted with [SupaBase](https://supabase.com/).
 
 
 ### :camera: **Preview**
