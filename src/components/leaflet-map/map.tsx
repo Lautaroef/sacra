@@ -1,5 +1,3 @@
-"use client";
-
 import type { InstitutionOptionalId } from "types";
 import type { LeafletMouseEvent } from "leaflet";
 import Link from "next/link";
